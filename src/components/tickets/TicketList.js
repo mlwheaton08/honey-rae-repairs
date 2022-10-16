@@ -3,10 +3,23 @@ import "./Tickets.css"
 
 export const TicketList = () => {
     const [tickets, setTickets] = useState([])
-    const [filteredTickets, setFiltered] = useState([])
+    const [filteredTickets, setFilteredTickets] = useState([])
+    const [emergency, setEmergency] = useState(false)
 
     const localHoneryUser = localStorage.getItem("honey_user")
     const honeyUserObject = JSON.parse(localHoneryUser)
+
+    useEffect(
+      () => {
+        if (emergency) {
+          const emergencyTickets = tickets.filter(ticket => ticket.emergency === true)
+          setFilteredTickets(emergencyTickets)
+        } else {
+          setFilteredTickets(tickets)
+        }
+      },
+      [emergency]
+    )
 
     useEffect(
         () => {
@@ -24,17 +37,27 @@ export const TicketList = () => {
     useEffect(
       () => {
         if (honeyUserObject.staff) {
-          setFiltered(tickets)
+          setFilteredTickets(tickets)
         } else {
           const myTickets = tickets.filter(ticket => ticket.userId === honeyUserObject.id)
-          setFiltered(myTickets)
+          setFilteredTickets(myTickets)
         }
       },
       [tickets]
     )
 
     return <>
+    {
+      honeyUserObject.staff
+      ? <>
+      <button onClick={ () => {setEmergency(true)}}>Emergency Only</button>
+      <button onClick={ () => {setEmergency(false)}}>Show All</button>
+      </>
+      : ""
+    }
+
       <h2>List of Tickets</h2>
+
       <article className="tickets">
         {
           filteredTickets.map(
