@@ -1,0 +1,25 @@
+.employees {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+}
+
+.employee {
+    background-color: pink;
+    border: 2px solid firebrick;
+    color: black;
+    padding: 0.2rem;
+    margin: 0.2rem;
+}
+
+.employee_header {
+    margin: 1rem 0 0.25rem 0;
+    font-style: oblique;
+}
+
+.employee_footer {
+    font-size: larger;
+    font-weight: 700;
+    line-height: 3rem;
+}
