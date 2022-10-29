@@ -5,6 +5,6 @@ export const Employee = ({id, fullName, email}) => {
         <div>
             <Link to={`/employees/${id}`}>Name: {fullName}</Link>
         </div>
-        <div>Emal: {email}</div>
+        <div>Email: {email}</div>
     </section>
 }
