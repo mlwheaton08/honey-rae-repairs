@@ -70,7 +70,6 @@ export const EmployeeForm = () => {
             </div>
 
             <form className="profile">
-                <h2 className="profile__title">New Service Ticket</h2>
                 <fieldset>
                     <div className="form-group">
                         <label htmlFor="specialty">Specialty:</label>
