@@ -3,8 +3,8 @@ import { EmployeeViews } from "./EmployeeViews"
 
 export const ApplicationViews = () => {
 
-    const localHoneryUser = localStorage.getItem("honey_user")
-    const honeyUserObject = JSON.parse(localHoneryUser)
+    const localHoneyUser = localStorage.getItem("honey_user")
+    const honeyUserObject = JSON.parse(localHoneyUser)
 
     if (honeyUserObject.staff) {
         return <EmployeeViews />
