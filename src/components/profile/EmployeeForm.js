@@ -18,7 +18,7 @@ export const EmployeeForm = () => {
     useEffect(
         () => {
             const fetchData = async () => {
-                const response = await fetch(`http://localhost:8088/employees?_userId=${honeyUserObject.id}`)
+                const response = await fetch(`http://localhost:8088/employees?userId=${honeyUserObject.id}`)
                 const responseJSON = await response.json()
                 const employeeObject = await responseJSON[0]
                 updateProfile(employeeObject)
@@ -26,7 +26,7 @@ export const EmployeeForm = () => {
             fetchData()
         },
         []
-        )
+    )
 
     useEffect(() => {
         if (feedback !== "") {
