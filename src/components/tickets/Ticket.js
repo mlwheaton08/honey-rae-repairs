@@ -13,13 +13,13 @@ export const Ticket = ({ ticketObject, currentUser, employees, fetchTickets }) =
     const userEmployee = employees.find(employee => employee.userId === currentUser.id)
 
     const canClose = () => {
-        if (userEmployee?.id === assignedEmployee?.id && ticketObject?.dateCompleted === "") {
+        if (currentUser.staff && userEmployee?.id === assignedEmployee?.id && ticketObject?.dateCompleted === "") {
             return <button onClick={closeTicket} className="ticket__finish">Finish</button>
         } else {
             return ""
         }
     }
-
+    
     const closeTicket = () => {
         const copy = {
             userId: ticketObject.userId,
@@ -27,7 +27,7 @@ export const Ticket = ({ ticketObject, currentUser, employees, fetchTickets }) =
             emergency: ticketObject.emergency,
             dateCompleted: new Date()
         }
-
+        
         const putTicketData = async () => {
             const options = {
                 method: "PUT",
@@ -40,6 +40,21 @@ export const Ticket = ({ ticketObject, currentUser, employees, fetchTickets }) =
             fetchTickets()
         }
         putTicketData()
+    }
+
+    const deleteButton = () => {
+        if (!currentUser.staff) {
+            return <button onClick={deleteTicket} className="ticket__delete">Delete</button>
+        } else {
+            return ""
+        }
+    }
+
+    const deleteTicket = async () => {
+        await fetch(`http://localhost:8088/serviceTickets/${ticketObject.id}`, {
+            method: "DELETE"
+        })
+        fetchTickets()
     }
 
     const buttonOrNoButton = () => {
@@ -86,6 +101,9 @@ export const Ticket = ({ ticketObject, currentUser, employees, fetchTickets }) =
             }
             {
                 canClose()
+            }
+            {
+                deleteButton()
             }
         </footer>
     </section>
