@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
+import { Ticket } from "./Ticket"
 import "./Tickets.css"
 
 export const TicketList = ({searchTermState}) => {
 	const [tickets, setTickets] = useState([])
+	const [employees, setEmployees] = useState([])
 	const [filteredTickets, setFilteredTickets] = useState([])
 	const [emergency, setEmergency] = useState(false)
 	const [openOnly, updateOpenOnly] = useState(false)
@@ -33,15 +35,23 @@ export const TicketList = ({searchTermState}) => {
 		},
 		[emergency]
 	)
+	
+	const fetchTickets = async () => {
+		const response = await fetch(`http://localhost:8088/serviceTickets?_embed=employeeTickets`)
+		const ticketArray = await response.json()
+		setTickets(ticketArray)
+	}
 
 	useEffect(
 		() => {
-			const fetchData = async () => {
-				const response = await fetch(`http://localhost:8088/serviceTickets`)
-				const ticketArray = await response.json()
-				setTickets(ticketArray)
+			fetchTickets()
+
+			const fetchEmployees = async () => {
+				const response = await fetch(`http://localhost:8088/employees?_expand=user`)
+				const employeeArray = await response.json()
+				setEmployees(employeeArray)
 			}
-			fetchData()
+			fetchEmployees()
 		},
 		[] // When this array is empty, you are observing initial component state
 	)
@@ -92,17 +102,11 @@ export const TicketList = ({searchTermState}) => {
 		<article className="tickets">
 			{
 				filteredTickets.map(
-					(ticket) => {
-						return (
-							<section key={ticket.id} className="ticket">
-								<header>
-									<Link to={`/tickets/${ticket.id}/edit`}>Ticket {ticket.id}</Link>
-								</header>
-								<section>{ticket.description}</section>
-								<footer>Emergency: {ticket.emergency ? "❗" : "No" }</footer>
-							</section>
-						)
-					}
+					(ticket) => <Ticket
+						employees={employees}
+						currentUser={honeyUserObject}
+						ticketObject={ticket}
+						fetchTickets={fetchTickets} />
 				)
 			}
 		</article>

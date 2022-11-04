@@ -42,8 +42,7 @@ export const TicketForm = () => {
               },
               body: JSON.stringify(ticketToSendToAPI)
             }
-            const response = await fetch (`http://localhost:8088/serviceTickets`, options)
-            await response.json()
+            await fetch (`http://localhost:8088/serviceTickets`, options)
             navigate("/tickets")
           }
           sendData()
