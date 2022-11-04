@@ -12,6 +12,36 @@ export const Ticket = ({ ticketObject, currentUser, employees, fetchTickets }) =
     // find the employee profile object for the current user
     const userEmployee = employees.find(employee => employee.userId === currentUser.id)
 
+    const canClose = () => {
+        if (userEmployee?.id === assignedEmployee?.id && ticketObject?.dateCompleted === "") {
+            return <button onClick={closeTicket} className="ticket__finish">Finish</button>
+        } else {
+            return ""
+        }
+    }
+
+    const closeTicket = () => {
+        const copy = {
+            userId: ticketObject.userId,
+            description: ticketObject.description,
+            emergency: ticketObject.emergency,
+            dateCompleted: new Date()
+        }
+
+        const putTicketData = async () => {
+            const options = {
+                method: "PUT",
+                headers: {
+                    "Content-type": "application/json"
+                },
+                body: JSON.stringify(copy)
+            }
+            await fetch(`http://localhost:8088/serviceTickets/${ticketObject.id}`, options)
+            fetchTickets()
+        }
+        putTicketData()
+    }
+
     const buttonOrNoButton = () => {
         if (currentUser.staff) {
             return <button
@@ -53,6 +83,9 @@ export const Ticket = ({ ticketObject, currentUser, employees, fetchTickets }) =
                 ticketObject.employeeTickets.length
                     ? `Currently being worked on by ${assignedEmployee !== null ? assignedEmployee?.user?.fullName : ""}`
                     : buttonOrNoButton()
+            }
+            {
+                canClose()
             }
         </footer>
     </section>
